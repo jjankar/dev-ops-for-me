@@ -1,0 +1,39 @@
+To authenticate Terraform with Azure, you can use Azure Active Directory (Azure AD) to create a service principal and obtain the necessary credentials. Here's a step-by-step guide on how to authenticate Terraform on Azure:
+
+Install Azure CLI: Start by installing the Azure CLI on your machine. You can download it from the official Microsoft Azure CLI documentation.
+
+Login to Azure: Open a terminal or command prompt and log in to Azure CLI using the command az login. Follow the instructions to complete the login process.
+
+Create a Service Principal: Once you're logged in, you can create a service principal using the Azure CLI. A service principal is a security identity used by applications and services to access Azure resources.
+
+Run the following command to create a service principal:
+
+az ad sp create-for-rbac --name <SERVICE_PRINCIPAL_NAME>
+
+Replace <SERVICE_PRINCIPAL_NAME> with a unique name for your service principal.
+
+The command will output the necessary credentials, including appId (client ID), password (client secret), tenant (tenant ID), and subscriptionId (Azure subscription ID). Make sure to save these values as you'll need them to authenticate Terraform.
+
+Assign Required Permissions: By default, the service principal does not have any permissions to access Azure resources. You need to assign it the necessary roles. For example, to grant the service principal contributor access to a specific resource group, use the following command:
+
+az role assignment create --assignee <SERVICE_PRINCIPAL_APP_ID> --role Contributor --scope /subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESOURCE_GROUP_NAME>
+
+Replace <SERVICE_PRINCIPAL_APP_ID> with the appId (client ID) obtained from the previous step, <SUBSCRIPTION_ID> with your Azure subscription ID, and <RESOURCE_GROUP_NAME> with the name of the resource group you want to grant access to.
+
+Configure Terraform: Now that you have the necessary credentials, you need to configure Terraform to use them. Create or modify the Terraform provider block in your .tf files and add the Azure provider configuration.
+
+Here's an example provider block using the Azure provider:
+
+provider "azurerm" {
+  subscription_id = "<SUBSCRIPTION_ID>"
+  client_id       = "<SERVICE_PRINCIPAL_APP_ID>"
+  client_secret   = "<SERVICE_PRINCIPAL_PASSWORD>"
+  tenant_id       = "<TENANT_ID>"
+}
+
+Replace <SUBSCRIPTION_ID>, <SERVICE_PRINCIPAL_APP_ID>, <SERVICE_PRINCIPAL_PASSWORD>, and <TENANT_ID> with the corresponding values obtained earlier.
+
+Initialize and Apply: After configuring the Azure provider, navigate to the directory containing your Terraform configuration files and run the following commands:
+
+terraform init
+terraform apply
