@@ -19,3 +19,5 @@ Once you have filled in all the required details, click on the "Verify and save"
 If the connection is successful, you can give a name to the service connection and choose whether to allow it to be used by all pipelines or limit it to specific pipelines.
 
 Finally, click on the "Save" or "OK" button to create the service connection. It will now be available for use in your pipelines or other Azure DevOps services that require the connection.
+
+https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops-2022
