@@ -1,0 +1,21 @@
+Open your Azure DevOps project and navigate to the project settings.
+
+In the project settings, click on the "Service connections" option. This is where you can manage your service connections.
+
+On the Service connections page, click on the "New service connection" button.
+
+You will see a list of different types of service connections available. Choose the type that corresponds to the service or resource you want to connect to. Some common types include Azure Resource Manager, Azure Container Registry, GitHub, etc. Select the appropriate type for your use case.
+
+Note: The available service connection types may vary based on the extensions installed in your Azure DevOps organization.
+
+Once you select the service connection type, you will be prompted to provide the required information. The details you need to provide will depend on the type of service connection you are creating.
+
+For example, if you are creating an Azure Resource Manager service connection, you will need to provide the Azure subscription details, authentication method (such as service principal or managed identity), and any other required settings.
+
+Fill in the necessary information according to the prompts, and ensure that you provide the correct credentials and permissions required to connect to the service or resource.
+
+Once you have filled in all the required details, click on the "Verify and save" or similar button to validate the connection. Azure DevOps will attempt to connect to the service using the provided information and verify the connection.
+
+If the connection is successful, you can give a name to the service connection and choose whether to allow it to be used by all pipelines or limit it to specific pipelines.
+
+Finally, click on the "Save" or "OK" button to create the service connection. It will now be available for use in your pipelines or other Azure DevOps services that require the connection.
