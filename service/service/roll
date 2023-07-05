@@ -1,0 +1,23 @@
+To assign the Contributor role to a service connection on an Azure subscription, you can follow these steps:
+
+Sign in to the Azure portal (portal.azure.com) using your Azure account credentials.
+
+Navigate to the Azure subscription that you want to grant the Contributor role to the service connection.
+
+Click on "Access control (IAM)" in the left navigation menu. This will open the access control page for the subscription.
+
+On the Access control (IAM) page, click on the "+ Add" button to add a new role assignment.
+
+In the Add role assignment panel, you will need to provide the following information:
+
+a. Role: Select "Contributor" from the list of available roles.
+
+b. Assign access to: Choose "Azure AD user, group, or service principal" option.
+
+c. Select: Enter the name or email address of the service connection for which you want to assign the Contributor role. Azure will search and display the matching results.
+
+Once you have entered the service connection name or email, select the appropriate service connection from the search results.
+
+Click on the "Save" button to assign the Contributor role to the selected service connection.
+
+Azure will now assign the Contributor role to the service connection on the Azure subscription. This means the service connection will have the necessary permissions to manage resources within the subscription.
