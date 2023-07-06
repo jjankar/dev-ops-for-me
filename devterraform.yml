@@ -1,0 +1,62 @@
+trigger:
+  branches:
+    include:
+      - main
+
+stages:
+- stage: TerraformInit
+  displayName: 'Terraform Init'
+  jobs:
+  - job: TerraformInit
+    displayName: 'Terraform Init'
+    steps:
+    - checkout: self
+    - task: AzureCLI@2
+      displayName: 'Azure CLI - Terraform Init'
+      inputs:
+        azureSubscription: 'YourAzureSubscription'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          cd path/to/terraform/files
+          terraform init -backend-config=backend.tfvars
+
+- stage: TerraformPlan
+  displayName: 'Terraform Plan'
+  dependsOn: TerraformInit
+  jobs:
+  - job: TerraformPlan
+    displayName: 'Terraform Plan'
+    steps:
+    - checkout: self
+    - task: AzureCLI@2
+      displayName: 'Azure CLI - Terraform Plan'
+      inputs:
+        azureSubscription: 'YourAzureSubscription'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          cd path/to/terraform/files
+          terraform plan -out=tfplan
+
+- stage: TerraformApply
+  displayName: 'Terraform Apply'
+  dependsOn: TerraformPlan
+  jobs:
+  - deployment: TerraformApply
+    displayName: 'Terraform Apply'
+    environment: 'Dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: AzureCLI@2
+            displayName: 'Azure CLI - Terraform Apply'
+            inputs:
+              azureSubscription: 'YourAzureSubscription'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                cd path/to/terraform/files
+                terraform apply -auto-approve tfplan
