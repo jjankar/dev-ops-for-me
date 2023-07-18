@@ -30,12 +30,6 @@ resource "azurerm_key_vault" "example" {
   soft_delete_retention_days  = 7
   purge_protection_enabled    = true
   enable_soft_delete          = true
-  network_acls {
-    bypass                      = "AzureServices"
-    default_action              = "Deny"
-    ip_rules                    = []
-    virtual_network_subnet_ids  = [azurerm_subnet.example.id]
-  }
 }
 
 data "azurerm_client_config" "current" {}
@@ -56,6 +50,37 @@ resource "azurerm_private_dns_zone_virtual_network_link" "example" {
   virtual_network_id    = azurerm_virtual_network.example.id
 }
 
+resource "azurerm_private_endpoint" "example" {
+  name                      = "example-private-endpoint"
+  resource_group_name       = azurerm_resource_group.example.name
+  location                  = azurerm_resource_group.example.location
+  subnet_id                 = azurerm_subnet.example.id
+  private_service_connection {
+    name                           = "example-private-service-connection"
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_key_vault.example.id
+    subresource_names              = ["vault"]
+  }
+}
+
+resource "azurerm_key_vault_network_acls" "example" {
+  key_vault_id = azurerm_key_vault.example.id
+
+  default_action = "Deny"
+
+  bypass = [
+    "AzureServices"
+  ]
+
+  ip_rules = [
+    "x.x.x.x"  # Replace with your IP address or range
+  ]
+
+  virtual_network_subnet_ids = [
+    azurerm_subnet.example.id
+  ]
+}
+
 output "keyvault_endpoint" {
-  value = azurerm_key_vault.example.vault_uri
+  value = azurerm_private_endpoint.example.private_service_connection.0.private_service_connection_state.0.endpoint
 }
