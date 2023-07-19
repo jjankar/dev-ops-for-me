@@ -33,6 +33,20 @@ resource "azurerm_key_vault" "example" {
   enable_soft_delete          = true
 }
 
+# Assign RBAC role to the App Service
+resource "azurerm_role_assignment" "example" {
+  scope                = azurerm_key_vault.example.id
+  role_definition_name = "Reader"
+  principal_id         = azurerm_app_service.example.identity[0].principal_id
+}
+
+# Create a Secret in the Key Vault
+resource "azurerm_key_vault_secret" "example" {
+  name         = "example-secret"
+  value        = "supersecretpassword123"
+  key_vault_id = azurerm_key_vault.example.id
+}
+
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_private_dns_zone" "example" {
@@ -84,4 +98,8 @@ resource "azurerm_key_vault_network_acls" "example" {
 
 output "keyvault_endpoint" {
   value = azurerm_private_endpoint.example.private_service_connection.0.private_service_connection_state.0.endpoint
+}
+
+output "secret_url" {
+  value = azurerm_key_vault_secret.example.id
 }
